@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  drupal:
+    build: .
+    container_name: drupal_app
+    environment:
+      - DRUPAL_DB_HOST=mariadb
+      - DRUPAL_DB_NAME=drupal
+      - DRUPAL_DB_USER=drupal
+      - DRUPAL_DB_PASSWORD=drupal_password
+      - DRUPAL_DB_PORT=3306
+    volumes:
+      - drupal-code:/opt/drupal
+    ports:
+      - "1337:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - drupal-network
+    restart: unless-stopped
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: drupal_db
+    environment:
+      MARIADB_DATABASE: drupal
+      MARIADB_USER: drupal
+      MARIADB_PASSWORD: drupal_password
+      MARIADB_ROOT_PASSWORD: root_password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - drupal-network
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  drupal-code:
+  db-data:
+
+networks:
+  drupal-network:
+    driver: bridge

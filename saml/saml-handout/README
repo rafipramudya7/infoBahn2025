@@ -1,0 +1,7 @@
+The remote instance will have different certificate files, different default token/password for
+the akadmin user.
+
+If you need to reset your instance, remember to delete docker volumes.
+
+You shouldn't need it to solve the problem, but in case you want it, in the
+handout version only, the password to the akadmin user is password

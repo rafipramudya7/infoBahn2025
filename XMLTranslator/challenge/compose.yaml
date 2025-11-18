@@ -1,0 +1,16 @@
+services:
+  web:
+    build: ./web
+    restart: always
+    ports:
+      - 8080:80
+  bot:
+    build: ./bot/
+    restart: always
+    init: true
+    ports:
+      - 1337:1337
+    environment:
+      - FLAG=${FLAG:-flag{fake_flag}}
+      - APP_URL=http://web:80
+
