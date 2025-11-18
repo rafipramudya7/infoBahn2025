@@ -8,22 +8,18 @@ berikut isi dari chaallange ini
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
     body {
         background: #0d1117;
         font-family: Arial, sans-serif;
         padding: 20px;
     }
-
     .gallery {
         display: flex;
         flex-wrap: wrap;
         gap: 15px;
         justify-content: center;
     }
-
-    /* FRAME BERUKURAN TETAP */
     .item {
         flex: 1 1 calc(25% - 15px);
         max-width: calc(25% - 15px);
